@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Αντικειμενοστραφής Προγραμματισμός — Γ' Λυκείου</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Source Sans 3', sans-serif; background: #f5f5f3; color: #1a1a1a; padding: 2rem 1rem 4rem; }
+  .pres { max-width: 860px; margin: 0 auto; }
+
+  /* Hero */
+  .hero { background: #0F3057; color: #fff; padding: 3.5rem 3rem 3rem; border-radius: 12px; margin-bottom: 2rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+  .hero::after { content: ''; position: absolute; bottom: -40px; left: 40px; width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+  .hero-subtitle { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 0.75rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; line-height: 1.2; color: #fff; margin-bottom: 0.75rem; }
+  .hero h1 span { color: #7FC8C8; }
+  .hero-desc { font-size: 1rem; color: rgba(255,255,255,0.7); max-width: 540px; line-height: 1.6; }
+  .hero-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 2rem; }
+  .hero-meta span { font-size: 12px; color: rgba(255,255,255,0.45); border: 0.5px solid rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; }
+
+  /* Activity */
+  .activity-slide { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; margin-bottom: 2rem; overflow: hidden; }
+  .activity-header { background: #1a6b3c; padding: 1rem 1.75rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .activity-badge { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #a8f0c6; font-weight: 500; }
+  .activity-tag { font-size: 11px; background: rgba(255,255,255,0.12); color: #d4f7e5; padding: 3px 10px; border-radius: 20px; margin-left: auto; }
+  .activity-body { padding: 1.75rem; }
+  .activity-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 500; color: #1a1a1a; margin-bottom: 1.25rem; }
+  .scenario-text { font-size: 15px; line-height: 1.8; color: #1a1a1a; background: #f7f7f5; border-left: 4px solid #1a6b3c; border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+  .actors-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1.25rem; }
+  .actor-card { border-radius: 8px; padding: 1rem; border: 0.5px solid #ddd; background: #f7f7f5; text-align: center; }
+  .actor-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; margin: 0 auto 0.6rem; }
+  .actor-card h5 { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 3px; }
+  .actor-card p { font-size: 12px; color: #555; line-height: 1.4; }
+  .actor-role { display: inline-block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; margin-top: 6px; font-weight: 500; }
+  .hint-row { display: flex; gap: 8px; align-items: flex-start; margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: 8px; background: #E6F1FB; border: 0.5px solid #B5D4F4; }
+  .hint-row svg { flex-shrink: 0; margin-top: 1px; }
+  .hint-row p { font-size: 13px; color: #185FA5; line-height: 1.55; }
+  .hint-row p strong { color: #0F3057; }
+
+  /* Sections */
+  .section-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #888; margin-bottom: 0.6rem; padding-left: 2px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 500; color: #1a1a1a; margin-bottom: 1.25rem; }
+  .card { background: #fff; border: 0.5px solid #ddd; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .card-accent { border-left: 3px solid #0F3057; }
+  .q-block { margin-bottom: 1.6rem; }
+  .q-block:last-child { margin-bottom: 0; }
+  .question { font-size: 14px; font-weight: 500; color: #185FA5; margin-bottom: 0.4rem; display: flex; align-items: flex-start; gap: 8px; }
+  .question .qnum { background: #E6F1FB; color: #185FA5; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+  .answer { font-size: 15px; color: #1a1a1a; line-height: 1.65; padding-left: 30px; }
+
+  .obj-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
+  .obj-box { border-radius: 8px; padding: 1.1rem; border: 0.5px solid #ddd; }
+  .obj-box h4 { font-size: 13px; font-weight: 500; margin-bottom: 0.6rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid rgba(0,0,0,0.1); }
+  .obj-box ul { list-style: none; font-size: 13px; line-height: 1.9; }
+  .obj-box ul li::before { content: '— '; opacity: 0.4; }
+  .props-box { background: #EAF3DE; } .props-box h4 { color: #3B6D11; } .props-box ul li { color: #3B6D11; }
+  .methods-box { background: #FAEEDA; } .methods-box h4 { color: #854F0B; } .methods-box ul li { color: #854F0B; }
+
+  .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .cmp-card { border-radius: 8px; padding: 1.2rem; border: 0.5px solid #ddd; }
+  .cmp-card h4 { font-size: 13px; font-weight: 500; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid rgba(0,0,0,0.08); }
+  .cmp-card p { font-size: 14px; line-height: 1.6; }
+  .old-card { background: #f7f7f5; } .old-card h4 { color: #666; } .old-card p { color: #666; }
+  .new-card { background: #E6F1FB; border-color: #B5D4F4; } .new-card h4 { color: #0F3057; } .new-card p { color: #185FA5; }
+
+  .steps-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin: 1rem 0; }
+  .step-card { border-radius: 8px; padding: 1.1rem; border: 0.5px solid #ddd; background: #fff; text-align: center; }
+  .step-num { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: #0F3057; opacity: 0.15; line-height: 1; margin-bottom: 0.3rem; }
+  .step-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 0.35rem; color: #1a1a1a; }
+  .step-card p { font-size: 13px; color: #666; line-height: 1.5; }
+
+  .advantages { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+  .adv { display: flex; gap: 10px; align-items: flex-start; padding: 0.9rem 1rem; border-radius: 8px; background: #f7f7f5; border: 0.5px solid #ddd; }
+  .adv-dot { width: 8px; height: 8px; border-radius: 50%; background: #0F3057; flex-shrink: 0; margin-top: 7px; }
+  .adv p { font-size: 14px; color: #1a1a1a; line-height: 1.5; }
+
+  .technique-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+  .tech-card { border-radius: 8px; padding: 1.2rem; border: 0.5px solid #ddd; background: #f7f7f5; }
+  .tech-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; }
+  .tech-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; color: #1a1a1a; }
+  .tech-card p { font-size: 13px; color: #555; line-height: 1.55; }
+
+  .section-block { margin-bottom: 2.5rem; }
+  hr.divider { border: none; border-top: 0.5px solid #ddd; margin: 2rem 0; }
+
+  /* Ενότητα 5 */
+  .method-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1rem 0; }
+  .method-step { border-radius: 8px; padding: 1rem; border: 0.5px solid #ddd; background: #fff; position: relative; }
+  .mstep-num { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .mstep-title { font-size: 14px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.35rem; }
+  .mstep-desc { font-size: 12px; color: #555; line-height: 1.5; }
+  .mstep-arrow { position: absolute; right: -10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: #bbb; z-index: 1; }
+
+  .uml-wrap { margin: 1.2rem 0; display: flex; justify-content: center; }
+
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+  .why-card { border-radius: 8px; padding: 1rem 1.1rem; border: 0.5px solid #ddd; background: #f7f7f5; }
+  .why-card h5 { font-size: 13px; font-weight: 500; color: #1a1a1a; margin-bottom: 0.35rem; }
+  .why-card p { font-size: 13px; color: #555; line-height: 1.5; }
+
+  .main-box { background: #f7f7f5; border: 0.5px solid #ddd; border-left: 3px solid #7FC8C8; border-radius: 8px; padding: 1rem 1.25rem; margin: 1rem 0; font-size: 14px; color: #1a1a1a; line-height: 1.65; }
+
+  .phases-table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 14px; }
+  .phases-table th { background: #0F3057; color: #fff; padding: 0.65rem 1rem; text-align: left; font-weight: 500; font-size: 12px; letter-spacing: 0.06em; }
+  .phases-table th:first-child { border-radius: 8px 0 0 0; }
+  .phases-table th:last-child { border-radius: 0 8px 0 0; }
+  .phases-table td { padding: 0.65rem 1rem; border-bottom: 0.5px solid #ddd; color: #1a1a1a; vertical-align: middle; line-height: 1.5; }
+  .phases-table tr:last-child td { border-bottom: none; }
+  .phases-table tr:nth-child(even) td { background: #f7f7f5; }
+  .phase-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 10px; border-radius: 20px; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 2rem 1.5rem; }
+    .hero h1 { font-size: 1.8rem; }
+    .obj-visual, .comparison, .steps-row, .technique-grid, .actors-row, .advantages, .method-steps, .why-grid { grid-template-columns: 1fr; }
+    .mstep-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="pres">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-subtitle">Πληροφορική — Γ' Λυκείου · ΑΕΠΠ</div>
+    <h1>Αντικειμενοστραφής<br><span>Προγραμματισμός</span></h1>
+    <div class="hero-desc">Μια σύγχρονη μεθοδολογία ανάπτυξης λογισμικού που μοντελοποιεί τον πραγματικό κόσμο μέσα από αντικείμενα, ιδιότητες και μεθόδους.</div>
+    <div class="hero-meta">
+      <span>5 ενότητες</span>
+      <span>14 βασικές ερωτήσεις</span>
+      <span>Θεωρία &amp; Σχεδίαση</span>
+    </div>
+  </div>
+
+  <!-- Δραστηριότητα εισαγωγής -->
+  <div class="activity-slide">
+    <div class="activity-header">
+      <span class="activity-badge">Δραστηριότητα εισαγωγής</span>
+      <span class="activity-tag">Πρόκληση — Εισαγωγή</span>
+    </div>
+    <div class="activity-body">
+      <div class="activity-title">Βραδιά ταινίας &amp; παραγγελία πίτσας</div>
+      <div class="scenario-text">
+        Είναι βραδιά ταινίας και μία παρέα μαζεύεται στο σπίτι της <strong>Λυδίας</strong> και αποφασίζουν να παραγγείλουν πίτσες και αναψυκτικά. Τηλεφωνούν στην τοπική πιτσαρία και δίνουν στον ιδιοκτήτη, τον <strong>κ. Αλέξανδρο</strong>, την παραγγελία και τη διεύθυνση του σπιτιού της. Όταν οι πίτσες ετοιμαστούν ο κ. Αλέξανδρος ζητά από τον <strong>διανομέα</strong> του να παραδώσει την παραγγελία τους στη διεύθυνση που δήλωσαν.
+      </div>
+      <div class="actors-row">
+        <div class="actor-card">
+          <div class="actor-avatar" style="background:#EAF3DE;color:#3B6D11;">ΛΥ</div>
+          <h5>Λυδία &amp; παρέα</h5><p>Δίνουν παραγγελία και διεύθυνση</p>
+          <span class="actor-role" style="background:#EAF3DE;color:#3B6D11;">Αντικείμενο</span>
+        </div>
+        <div class="actor-card">
+          <div class="actor-avatar" style="background:#E6F1FB;color:#185FA5;">ΑΛ</div>
+          <h5>κ. Αλέξανδρος</h5><p>Λαμβάνει &amp; οργανώνει την παραγγελία</p>
+          <span class="actor-role" style="background:#E6F1FB;color:#185FA5;">Αντικείμενο</span>
+        </div>
+        <div class="actor-card">
+          <div class="actor-avatar" style="background:#FAEEDA;color:#854F0B;">ΔΙ</div>
+          <h5>Διανομέας</h5><p>Εκτελεί την παράδοση στη διεύθυνση</p>
+          <span class="actor-role" style="background:#FAEEDA;color:#854F0B;">Αντικείμενο</span>
+        </div>
+      </div>
+      <div class="hint-row">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <circle cx="10" cy="10" r="8.5" stroke="#185FA5" stroke-width="1.2"/>
+          <path d="M10 9v5" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="10" cy="6.5" r="0.8" fill="#185FA5"/>
+        </svg>
+        <p>Σκεφτείτε: ποια είναι τα <strong>αντικείμενα</strong> του σεναρίου; Ποιες οι <strong>ιδιότητές</strong> τους; Πώς <strong>αλληλεπιδρούν</strong> μεταξύ τους;</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ενότητα 1 -->
+  <div class="section-block">
+    <div class="section-label">Ενότητα 1</div>
+    <div class="section-title">Ορισμοί και Βασικές Έννοιες</div>
+    <div class="card card-accent">
+      <div class="q-block">
+        <div class="question"><span class="qnum">1</span> Τι είναι ο αντικειμενοστραφής προγραμματισμός;</div>
+        <div class="answer">Μεθοδολογία ανάπτυξης εφαρμογών που βασίζεται σε αυτόνομες προγραμματιστικές οντότητες με δική τους ταυτότητα και συμπεριφορά. Τα δεδομένα θεωρούνται πρωτεύοντα δομικά στοιχεία.</div>
+      </div>
+      <div class="q-block">
+        <div class="question"><span class="qnum">2</span> Τι είναι τα αντικείμενα (Objects);</div>
+        <div class="answer">Ο ομαδοποιημένος συνδυασμός δεδομένων και κώδικα που μπορούμε να χειριστούμε ενιαία. Αντιστοιχούν σε φυσικές οντότητες ή έννοιες του πραγματικού κόσμου.</div>
+      </div>
+    </div>
+    <div class="obj-visual">
+      <div class="obj-box props-box"><h4>Ιδιότητες (Properties)</h4><ul><li>Χαρακτηριστικά αντικειμένου</li><li>Προσδιορίζουν την υπόστασή του</li><li>Είναι τα δεδομένα του</li></ul></div>
+      <div class="obj-box methods-box"><h4>Μέθοδοι (Methods)</h4><ul><li>Ενέργειες ή κανόνες συμπεριφοράς</li><li>Εφαρμόζονται στα δεδομένα</li><li>Καθορίζουν τη συμπεριφορά του</li></ul></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Ενότητα 2 -->
+  <div class="section-block">
+    <div class="section-label">Ενότητα 2</div>
+    <div class="section-title">Φιλοσοφία και Προσέγγιση</div>
+    <div class="card card-accent">
+      <div class="q-block">
+        <div class="question"><span class="qnum">5</span> Πώς γίνεται η προσέγγιση ενός προβλήματος;</div>
+        <div class="answer">Με «φυσική ερμηνεία» — η επίλυση επιτυγχάνεται μέσα από τη σύνθεση ικανοτήτων διαφορετικών ανεξάρτητων οντοτήτων που αλληλεπιδρούν μεταξύ τους.</div>
+      </div>
+      <div class="q-block">
+        <div class="question"><span class="qnum">6</span> Από πού πηγάζουν οι θεμελιώδεις αρχές του;</div>
+        <div class="answer">Από τον καθημερινό φυσικό κόσμο. Στηρίζονται στην προσομοίωση άγνωστων εννοιών με πρακτικές γνώσεις και εικόνες από το περιβάλλον μας.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Ενότητα 3 -->
+  <div class="section-block">
+    <div class="section-label">Ενότητα 3</div>
+    <div class="section-title">Σχεδίαση και Σύγκριση</div>
+    <div class="comparison">
+      <div class="cmp-card old-card"><h4>Παραδοσιακός Προγραμματισμός</h4><p>Η δομή στηρίζεται στις <strong>ενέργειες</strong> (επεξεργασία). Τα δεδομένα είναι δευτερεύοντα.</p></div>
+      <div class="cmp-card new-card"><h4>Αντικειμενοστραφής Προγραμματισμός</h4><p>Η δομή στηρίζεται στα <strong>δεδομένα</strong>. Οι ενέργειες εξαρτώνται από τα αντικείμενα.</p></div>
+    </div>
+    <div class="steps-row">
+      <div class="step-card"><div class="step-num">1</div><h4>Αντικείμενα</h4><p>Τα αντικείμενα που συμμετέχουν βάσει του ρόλου τους</p></div>
+      <div class="step-card"><div class="step-num">2</div><h4>Ιδιότητες</h4><p>Τα χαρακτηριστικά κάθε αντικειμένου</p></div>
+      <div class="step-card"><div class="step-num">3</div><h4>Μέθοδοι</h4><p>Οι υπηρεσίες ή ενέργειες που προσφέρει κάθε αντικείμενο</p></div>
+    </div>
+    <div class="advantages">
+      <div class="adv"><div class="adv-dot"></div><p>Προγράμματα πιο <strong>ευέλικτα</strong> και επαναχρησιμοποιήσιμα</p></div>
+      <div class="adv"><div class="adv-dot"></div><p><strong>Απόκρυψη λεπτομερειών</strong> (encapsulation) για ευκολότερη διαχείριση</p></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Ενότητα 4 -->
+  <div class="section-block">
+    <div class="section-label">Ενότητα 4</div>
+    <div class="section-title">Τεχνικές και Δομή</div>
+    <div class="technique-grid">
+      <div class="tech-card">
+        <div class="tech-icon" style="background:#E6F1FB;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" stroke="#185FA5" stroke-width="1.5"/><rect x="5" y="5" width="6" height="6" rx="1.5" fill="#185FA5" opacity="0.35"/></svg>
+        </div>
+        <h4>Ενθυλάκωση</h4><p>Συνδυασμός δεδομένων και μεθόδων εσωτερικά. Διαχωρισμός εσωτερικού και εξωτερικού κόσμου.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon" style="background:#EAF3DE;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="4" r="2.5" stroke="#3B6D11" stroke-width="1.5"/><circle cx="4" cy="12" r="2" stroke="#3B6D11" stroke-width="1.5"/><circle cx="12" cy="12" r="2" stroke="#3B6D11" stroke-width="1.5"/><path d="M6 5.5L4.5 10M10 5.5L11.5 10" stroke="#3B6D11" stroke-width="1" stroke-dasharray="2 1.5"/></svg>
+        </div>
+        <h4>Κλάσεις</h4><p>Ομαδοποίηση αντικειμένων σε γενικούς τύπους που καθορίζουν ιδιότητες και συμπεριφορά.</p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon" style="background:#FAEEDA;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="5" width="5" height="3.5" rx="1.5" stroke="#854F0B" stroke-width="1.5"/><rect x="10" y="7.5" width="5" height="3.5" rx="1.5" stroke="#854F0B" stroke-width="1.5"/><path d="M6 6.7h2.5c.8 0 1.5.7 1.5 1.5v.8" stroke="#854F0B" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <h4>Μηνύματα</h4><p>Τρόπος αλληλεπίδρασης αντικειμένων για ανταλλαγή πληροφοριών ή αίτηση υπηρεσιών.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Ενότητα 5 -->
+  <div class="section-block">
+    <div class="section-label">Ενότητα 5</div>
+    <div class="section-title">Μεθοδολογία και Σχεδίαση</div>
+
+    <div class="card card-accent">
+
+      <!-- Q11 -->
+      <div class="q-block">
+        <div class="question"><span class="qnum">11</span> Ποια μεθοδολογία ακολουθούμε για να «χτίσουμε» αντικειμενοστραφή προγράμματα;</div>
+        <div class="answer" style="padding-left:0; margin-top:0.75rem;">
+          <div class="method-steps">
+            <div class="method-step" style="border-top:3px solid #185FA5;">
+              <div class="mstep-num" style="color:#185FA5;">01 — Ανάλυση</div>
+              <div class="mstep-title">Εντοπισμός οντοτήτων</div>
+              <div class="mstep-desc">Προσδιορισμός των αντικειμένων του προβλήματος</div>
+              <span class="mstep-arrow">›</span>
+            </div>
+            <div class="method-step" style="border-top:3px solid #3B6D11;">
+              <div class="mstep-num" style="color:#3B6D11;">02 — Σχεδιασμός</div>
+              <div class="mstep-title">Ιδιότητες &amp; μέθοδοι</div>
+              <div class="mstep-desc">Καθορισμός χαρακτηριστικών για κάθε αντικείμενο</div>
+              <span class="mstep-arrow">›</span>
+            </div>
+            <div class="method-step" style="border-top:3px solid #854F0B;">
+              <div class="mstep-num" style="color:#854F0B;">03 — Σχέσεις</div>
+              <div class="mstep-title">Αλληλεπίδραση</div>
+              <div class="mstep-desc">Πώς τα αντικείμενα ανταλλάσσουν μηνύματα</div>
+              <span class="mstep-arrow">›</span>
+            </div>
+            <div class="method-step" style="border-top:3px solid #533AB7;">
+              <div class="mstep-num" style="color:#533AB7;">04 — Υλοποίηση</div>
+              <div class="mstep-title">Συγγραφή κώδικα</div>
+              <div class="mstep-desc">Σύνταξη βάσει των κλάσεων που σχεδιάστηκαν</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="q-block">
+        <div class="question"><span class="qnum">12</span> Πώς γίνεται η διαγραμματική αναπαράσταση με UML;</div>
+        <div class="answer">
+          Χρησιμοποιούμε τη γλώσσα <strong>UML (Unified Modeling Language)</strong>. Κάθε κλάση αναπαρίσταται ως ορθογώνιο χωρισμένο σε τρία μέρη:
+          <div class="uml-wrap">
+            <svg viewBox="0 0 340 180" width="340" height="180" xmlns="http://www.w3.org/2000/svg">
+              <rect x="60" y="10" width="200" height="160" rx="4" fill="none" stroke="#0F3057" stroke-width="1.5"/>
+              <rect x="60" y="10" width="200" height="48" rx="4" fill="#0F3057"/>
+              <rect x="60" y="54" width="200" height="4" fill="#0F3057"/>
+              <text x="160" y="40" text-anchor="middle" font-family="'Source Sans 3',sans-serif" font-size="15" font-weight="500" fill="#ffffff">ΌνομαΚλάσης</text>
+              <text x="72" y="82" font-family="'Source Sans 3',sans-serif" font-size="12" fill="#3B6D11">+ ιδιότητα1 : τύπος</text>
+              <text x="72" y="100" font-family="'Source Sans 3',sans-serif" font-size="12" fill="#3B6D11">+ ιδιότητα2 : τύπος</text>
+              <line x1="60" y1="114" x2="260" y2="114" stroke="#ccc" stroke-width="0.5"/>
+              <text x="72" y="132" font-family="'Source Sans 3',sans-serif" font-size="12" fill="#854F0B">+ μέθοδος1()</text>
+              <text x="72" y="150" font-family="'Source Sans 3',sans-serif" font-size="12" fill="#854F0B">+ μέθοδος2()</text>
+              <text x="272" y="40" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#555">① Όνομα</text>
+              <text x="272" y="92" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#3B6D11">② Ιδιότητες</text>
+              <text x="272" y="140" font-family="'Source Sans 3',sans-serif" font-size="11" fill="#854F0B">③ Μέθοδοι</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q13 -->
+      <div class="q-block">
+        <div class="question"><span class="qnum">13</span> Πώς δομείται ένα αντικειμενοστραφές πρόγραμμα;</div>
+        <div class="answer">
+          Δεν αποτελείται από μια συνεχή λίστα εντολών, αλλά από ένα σύνολο <strong>Κλάσεων</strong>.
+          <div class="main-box">
+            Το κύριο πρόγραμμα <strong>(main)</strong> λειτουργεί ως <em>«ενορχηστρωτής»</em> — δημιουργεί αντικείμενα από τις κλάσεις και εκκινεί την επικοινωνία μεταξύ τους μέσω μηνυμάτων.
+          </div>
+        </div>
+      </div>
+
+      <!-- Q14 -->
+      <div class="q-block">
+        <div class="question"><span class="qnum">14</span> Γιατί είναι σημαντική η διαγραμματική αναπαράσταση;</div>
+        <div class="answer" style="padding-left:0; margin-top:0.75rem;">
+          <div class="why-grid">
+            <div class="why-card">
+              <h5>Οπτικοποίηση πολυπλοκότητας</h5>
+              <p>Επιτρέπει στον προγραμματιστή να δει τη συνολική εικόνα πριν γράψει κώδικα.</p>
+            </div>
+            <div class="why-card">
+              <h5>Ευκολότερη συντήρηση</h5>
+              <p>Καθιστά σαφές πού «ζουν» τα δεδομένα και ποιες μέθοδοι τα επηρεάζουν.</p>
+            </div>
+            <div class="why-card" style="grid-column:1/-1;">
+              <h5>Καλύτερη επικοινωνία</h5>
+              <p>Λειτουργεί ως κοινή γλώσσα μεταξύ της ομάδας ανάπτυξης, επιτρέποντας τον διαχωρισμό αρμοδιοτήτων.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Συνοπτικός πίνακας -->
+    <div style="margin-top:1.5rem;">
+      <div class="section-label" style="margin-bottom:0.5rem;">Συνοπτικός πίνακας φάσεων</div>
+      <table class="phases-table">
+        <thead>
+          <tr><th>Φάση</th><th>Ενέργεια</th><th>Σκοπός</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="phase-badge" style="background:#E6F1FB;color:#0F3057;">Ανάλυση</span></td>
+            <td>Εντοπισμός Οντοτήτων</td>
+            <td>Τι χρειαζόμαστε;</td>
+          </tr>
+          <tr>
+            <td><span class="phase-badge" style="background:#EAF3DE;color:#3B6D11;">Σχεδίαση</span></td>
+            <td>Διαγραμματική απεικόνιση (UML)</td>
+            <td>Πώς θα συνεργάζονται;</td>
+          </tr>
+          <tr>
+            <td><span class="phase-badge" style="background:#EEEDFE;color:#533AB7;">Υλοποίηση</span></td>
+            <td>Συγγραφή Κλάσεων &amp; Αντικειμένων</td>
+            <td>Πώς θα λειτουργήσει;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
